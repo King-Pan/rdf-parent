@@ -37,11 +37,11 @@ public class ResultUtil {
     }
 
     public static ResponseVO error(String message) {
-        return vo(CommonConst.DEFAULT_ERROR_CODE, message, null);
+        return null;
     }
 
     public static ResponseVO success(String message, Object data) {
-        return vo(CommonConst.DEFAULT_SUCCESS_CODE, message, data);
+        return null;
     }
 
     public static ResponseVO success(String message) {
@@ -60,11 +60,8 @@ public class ResultUtil {
         return new PageResult(total, list);
     }
 
-    public static PageResult tablePage(PageInfo info) {
-        if (info == null) {
-            return new PageResult(0L, new ArrayList());
-        }
-        return tablePage(info.getTotal(), info.getList());
+    public static PageResult tablePage() {
+        return null;
     }
 
 }
