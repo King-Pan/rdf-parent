@@ -1,5 +1,6 @@
 package club.javalearn.rdf.security.shiro;
 
+import club.javalearn.rdf.properties.ShiroProperties;
 import club.javalearn.rdf.utils.Constants;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -24,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Getter
 @Setter
+@Component
 public class LoginLimitHashedCredentialsMatcher extends HashedCredentialsMatcher {
 
 
@@ -32,8 +35,15 @@ public class LoginLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
 
     private Ehcache passwordRetryCache;
 
+    @Autowired
+    private ShiroProperties shiroProperties;
+
 
     public LoginLimitHashedCredentialsMatcher() {
+        //设置加密次数
+        this.setHashIterations(10);
+        //设置加密算法
+        this.setHashAlgorithmName("sha-1");
     }
 
     @Override

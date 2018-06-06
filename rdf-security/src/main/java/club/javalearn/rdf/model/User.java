@@ -43,6 +43,12 @@ public class User implements Serializable {
     private String userName;
 
     /**
+     * 加密盐值
+     */
+    @Column(nullable = false,length = 128)
+    private String salt;
+
+    /**
      * 用户邮箱
      */
     @NotEmpty(message = "邮箱不能为空")
@@ -109,6 +115,15 @@ public class User implements Serializable {
             return user.getUserId().equals(this.getUserId());
         }
         return false;
+    }
+
+
+    /**
+     * 证书凭证: 加密盐值: 用户名+盐值
+     * @return
+     */
+    public String getCredentialsSalt() {
+        return userName + salt;
     }
 
     @Override

@@ -2,6 +2,7 @@ package club.javalearn.rdf.repository;
 
 import club.javalearn.rdf.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Time: 上午10:37
  * Description: No Description
  */
+@Transactional(rollbackFor = RuntimeException.class)
 public interface UserRepository extends JpaRepository<User,Long> {
 
     /**

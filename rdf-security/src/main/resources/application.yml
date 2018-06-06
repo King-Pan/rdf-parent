@@ -44,3 +44,10 @@ spring:
       hibernate:
         dialect:
           org.hibernate.dialect.MySQL5InnoDBDialect
+shiro:
+  password:
+    hashIterations: 10 #默认加密次数,在密码匹配和注册两个地方使用
+    algorithmName: sha-1 #加密算法
+logging:
+  level:
+    org.apache.shiro: debug

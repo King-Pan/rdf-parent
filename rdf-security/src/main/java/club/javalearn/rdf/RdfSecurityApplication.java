@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author king-pan
  */
 @SpringBootApplication
+
 public class RdfSecurityApplication {
 
 	public static void main(String[] args) {

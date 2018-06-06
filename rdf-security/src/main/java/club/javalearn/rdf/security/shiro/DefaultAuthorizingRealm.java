@@ -10,6 +10,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class DefaultAuthorizingRealm extends AuthorizingRealm {
         String username = utoken.getUsername();
         User user = userService.findByUserName(username);
         //放入shiro.调用CredentialsMatcher检验密码
-        return new SimpleAuthenticationInfo(user, user.getPassword(), this.getClass().getName());
+        return new SimpleAuthenticationInfo(user, user.getPassword(), ByteSource.Util.bytes(user.getCredentialsSalt()), this.getClass().getName());
     }
 
     /**
@@ -76,4 +77,9 @@ public class DefaultAuthorizingRealm extends AuthorizingRealm {
         return info;
     }
 
+
+    @Override
+    public String getName() {
+        return "DefaultAuthorizingRealm";
+    }
 }
