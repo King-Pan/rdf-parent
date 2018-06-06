@@ -1,5 +1,6 @@
 package club.javalearn.rdf.web.controller;
 
+import club.javalearn.rdf.model.User;
 import club.javalearn.rdf.properties.ShiroProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -41,7 +42,6 @@ public class LoginController {
      * @return
      */
     @PostMapping("/login")
-    @ResponseBody
     public Object submitLogin(@RequestParam("username") String userName, @RequestParam("password") String password, @RequestParam("remember-me") boolean rememberMe) {
         UsernamePasswordToken token = new UsernamePasswordToken(userName, password, rememberMe);
         //获取当前的Subject
@@ -51,7 +51,11 @@ public class LoginController {
             // 每个Realm都能在必要时对提交的AuthenticationTokens作出反应
             // 所以这一步在调用login(token)方法时,它会走到xxRealm.doGetAuthenticationInfo()方法中,具体验证方式详见此方法
             currentUser.login(token);
-            return "登录成功！";
+
+            User user = (User) SecurityUtils.getSubject().getPrincipal();
+
+            System.out.println("登录用户信息: " + user);
+            return new ModelAndView("/index");
         } catch (Exception e) {
             log.error("登录失败，用户名[{}]", userName, e);
             token.clear();
