@@ -51,3 +51,4 @@ shiro:
 logging:
   level:
     org.apache.shiro: debug
+    club.javalearn: debug

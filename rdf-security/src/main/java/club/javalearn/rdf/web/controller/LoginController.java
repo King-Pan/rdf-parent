@@ -7,6 +7,8 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,7 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
  * Description: No Description
  */
 @Slf4j
-@RestController
+@Controller
 public class LoginController {
 
     @Autowired
@@ -42,7 +44,7 @@ public class LoginController {
      * @return
      */
     @PostMapping("/login")
-    public Object submitLogin(@RequestParam("username") String userName, @RequestParam("password") String password, @RequestParam("remember-me") boolean rememberMe) {
+    public String submitLogin(@RequestParam("username") String userName, @RequestParam("password") String password, @RequestParam(name = "remember-me", required = false, defaultValue = "false") boolean rememberMe) {
         UsernamePasswordToken token = new UsernamePasswordToken(userName, password, rememberMe);
         //获取当前的Subject
         Subject currentUser = SecurityUtils.getSubject();
@@ -54,12 +56,19 @@ public class LoginController {
 
             User user = (User) SecurityUtils.getSubject().getPrincipal();
 
-            System.out.println("登录用户信息: " + user);
-            return new ModelAndView("/index");
+            if (log.isDebugEnabled()) {
+                log.debug("登录用户为{}", user.getUserName());
+            }
+            return "redirect:/indexPage";
         } catch (Exception e) {
             log.error("登录失败，用户名[{}]", userName, e);
             token.clear();
-            return e.getMessage();
+            return "redirect:/loginPage";
         }
+    }
+
+    @GetMapping("/indexPage")
+    public ModelAndView indexPage() {
+        return new ModelAndView("/index");
     }
 }
