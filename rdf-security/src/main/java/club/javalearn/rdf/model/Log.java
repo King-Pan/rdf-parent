@@ -30,14 +30,29 @@ public class Log {
     private String moduleName;
 
     /**
-     * 记录时间
+     * 访问时间
      */
-    private Date time;
+    private Date createDate;
+
+    /**
+     * 时长
+     */
+    private Long time;
 
     /**
      * 用户ID
      */
     private String userName;
+
+    /**
+     * 用户操作
+     */
+    private String operation;
+
+    /**
+     * 访问IP
+     */
+    private String ip;
 
     /**
      * 参数
@@ -55,7 +70,19 @@ public class Log {
     private String method;
 
     /**
+     * 状态
+     */
+    private String status;
+
+    /**
      * 返回值
      */
+    @Column(length = 4000)
     private String result;
+
+    /**
+     * 错误消息
+     */
+    @Column(length = 4000)
+    private String errorMessage;
 }

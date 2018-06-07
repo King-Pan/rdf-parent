@@ -2,19 +2,23 @@ package club.javalearn.rdf.aspect;
 
 import club.javalearn.rdf.model.Log;
 import club.javalearn.rdf.model.User;
+import club.javalearn.rdf.service.LogService;
+import club.javalearn.rdf.utils.FastJsonUtils;
+import club.javalearn.rdf.utils.IpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,67 +33,104 @@ import java.util.Map;
 @Component
 public class LogAspect {
 
+    @Autowired
+    private LogService logService;
+
     /**
      * 定义切面
      */
-    @Pointcut("@annotation(club.javalearn.rdf.aspect.LogService)")
-    public void serviceAspect() { }
+    @Pointcut("@annotation(club.javalearn.rdf.aspect.SysLog)")
+    public void serviceAspect() {
+    }
 
     @Before("serviceAspect()")
-    public  void doBefore(JoinPoint joinPoint) {
+    public void doBefore(JoinPoint joinPoint) {
         //前置通知
-        if(log.isDebugEnabled()){
+        if (log.isDebugEnabled()) {
             log.debug("-->: 前置通知");
         }
     }
 
 
-    @AfterReturning(pointcut = "serviceAspect()",returning = "rvt")
-    public Object  doAfterReturning(JoinPoint joinPoint,Object rvt){
-        if(log.isDebugEnabled()){
+    @AfterReturning(pointcut = "serviceAspect()", returning = "rvt")
+    public Object doAfterReturning(JoinPoint joinPoint, Object rvt) {
+        if (log.isDebugEnabled()) {
             log.debug("-->: AfterReturning");
         }
         try {
             //记录日志
-        }catch (Exception e){
-            log.error("记录日志出错",e);
+        } catch (Exception e) {
+            log.error("记录日志出错", e);
         }
         return rvt;
     }
 
     @Around(value = "serviceAspect()")
-    public Object around(ProceedingJoinPoint pjp) throws Throwable{
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         Object rvt;
-        if(log.isDebugEnabled()){
+        Log logInfo = new Log();
+        long beginTime = 0L;
+        if (log.isDebugEnabled()) {
             log.debug("-->: 开始记录日志");
         }
         try {
-            rvt = pjp.proceed();
-            Log log = new Log();
+            MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+            Method method = signature.getMethod();
+
+            SysLog syslog = method.getAnnotation(SysLog.class);
+            if (syslog != null) {
+                //注解上的描述
+                logInfo.setModuleName(syslog.module());
+                logInfo.setOperation(syslog.operation());
+            }
+
             User user = (User) SecurityUtils.getSubject().getPrincipal();
-            log.setUserName(user.getUserName());
-            log.setTime(new Date());
+            if (user != null) {
+                //记录用户名
+                logInfo.setUserName(user.getUserName());
+            }
+            logInfo.setCreateDate(new Date());
+
+            //请求的参数
+            Object[] args = joinPoint.getArgs();
+            try {
+                logInfo.setParams(FastJsonUtils.getBeanToJson(args));
+            } catch (Exception e) {
+                log.error("记录日志解析参数失败 : " + e.getMessage());
+            }
+            //获取request
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-            Map<String,String[]> parapMap = request.getParameterMap();
-            log.setMethod(request.getMethod());
-            log.setUrl(request.getRequestURI());
-
-
+            //获取请求方法
+            logInfo.setMethod(request.getMethod());
+            //获取用户请求地址
+            logInfo.setUrl(request.getRequestURI());
+            //设置IP地址
+            logInfo.setIp(IpUtils.getIpAddr(request));
+            beginTime = System.currentTimeMillis();
+            rvt = joinPoint.proceed();
+            //执行时长(毫秒)
+            logInfo.setTime(System.currentTimeMillis() - beginTime);
+            logInfo.setResult(FastJsonUtils.getBeanToJson(rvt));
+            logInfo.setStatus("成功");
             //记录成功
         } catch (Throwable throwable) {
             //记录失败
+            logInfo.setResult("访问失败");
+            logInfo.setErrorMessage(throwable.getMessage());
+            logInfo.setStatus("失败");
+            logInfo.setTime(System.currentTimeMillis() - beginTime);
             throw throwable;
         }
-        if(log.isDebugEnabled()){
-            log.debug("-->: 开始记录日志");
+        if (log.isDebugEnabled()) {
+            log.debug("-->: 结束记录日志");
         }
-
+        logService.saveLog(logInfo);
         return rvt;
     }
 
     @After("serviceAspect()")
-    public  void doAfter(JoinPoint joinPoint) {
-        if(log.isDebugEnabled()){
+    public void doAfter(JoinPoint joinPoint) {
+        if (log.isDebugEnabled()) {
             log.debug("After...");
         }
     }

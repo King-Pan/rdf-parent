@@ -13,9 +13,9 @@ import java.lang.annotation.*;
 @Target({ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface LogService {
+public @interface SysLog {
     //模块
     String module()  default "";
     //说明
-    String description()  default "";
+    String operation()  default "";
 }
