@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -1069,8 +1069,9 @@
                                                     <img src="assets/app/media/img/users/user4.jpg"
                                                          class="m--img-rounded m--marginless" alt="">
                                                 </div>
-                                                <div class="m-card-user__details" sec:authorize="isAuthenticated()">
-                                                    <span class="m-card-user__name m--font-weight-500" sec:authentication="name">
+                                                <div class="m-card-user__details">
+                                                    <span class="m-card-user__name m--font-weight-500" shiro:authenticated="true" th:text="${session.user}" >
+
                                                     </span>
                                                     <a href="" class="m-card-user__email m--font-weight-300 m-link">
                                                         mark.andre@gmail.com

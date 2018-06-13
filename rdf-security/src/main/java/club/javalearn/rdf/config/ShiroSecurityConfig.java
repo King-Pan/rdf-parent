@@ -1,6 +1,6 @@
 package club.javalearn.rdf.config;
 
-import club.javalearn.rdf.properties.ShiroProperties;
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import club.javalearn.rdf.security.shiro.CustomFormAuthenticationFilter;
 import club.javalearn.rdf.security.shiro.DefaultAuthorizingRealm;
 import club.javalearn.rdf.security.shiro.LoginLimitHashedCredentialsMatcher;
@@ -11,8 +11,6 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -44,12 +42,13 @@ public class ShiroSecurityConfig {
         filterChainDefinitionMap.put("/jsp/login.jsp*", "anon");
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/loginPage", "anon");
-        filterChainDefinitionMap.put("/logout*", "anon");
+
         filterChainDefinitionMap.put("/webjars/**", "anon");
         filterChainDefinitionMap.put("/js/**", "anon");
         filterChainDefinitionMap.put("/css/**", "anon");
         filterChainDefinitionMap.put("/assets/**", "anon");
-
+        //shiro已经替我们实现了
+        filterChainDefinitionMap.put("/logout", "logout");
 
         //表示需要认证才可以访问
         filterChainDefinitionMap.put("/*", "authc");
@@ -58,6 +57,16 @@ public class ShiroSecurityConfig {
         filterChainDefinitionMap.put("/*.*", "authc");
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
+    }
+
+
+    /**
+     * 开启thymeleaf-extras-shiro功能
+     * @return ShiroDialect
+     */
+    @Bean
+    public ShiroDialect shiroDialect() {
+        return new ShiroDialect();
     }
 
     /**

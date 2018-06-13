@@ -5,9 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,6 +24,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class LoginController {
 
+
+    @Autowired
+    private HttpSession session;
 
     @GetMapping("/loginPage")
     public ModelAndView loginPage() {
@@ -48,6 +54,8 @@ public class LoginController {
             currentUser.login(token);
 
             User user = (User) SecurityUtils.getSubject().getPrincipal();
+
+            session.setAttribute("user", user);
 
             if (log.isDebugEnabled()) {
                 log.debug("登录用户为{}", user.getUserName());
