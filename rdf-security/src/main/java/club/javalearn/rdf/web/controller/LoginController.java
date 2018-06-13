@@ -1,14 +1,11 @@
 package club.javalearn.rdf.web.controller;
 
 import club.javalearn.rdf.model.User;
-import club.javalearn.rdf.properties.ShiroProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,14 +21,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class LoginController {
 
-    @Autowired
-    private ShiroProperties shiroProperties;
-
 
     @GetMapping("/loginPage")
     public ModelAndView loginPage() {
-        System.out.println(shiroProperties.getPassword().getHashIterations());
-        System.out.println(shiroProperties.getPassword().getAlgorithmName());
+        log.debug("进入登录页面....");
         return new ModelAndView("login");
     }
 

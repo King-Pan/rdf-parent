@@ -35,7 +35,7 @@ public class ShiroSecurityConfig {
         bean.setSecurityManager(securityManager());
         //配置登录的url和登录成功的url
         bean.setLoginUrl("/loginPage");
-        bean.setSuccessUrl("/");
+        bean.setSuccessUrl("/index");
         //
         bean.setUnauthorizedUrl("/error/403");
         //配置访问权限
@@ -43,10 +43,13 @@ public class ShiroSecurityConfig {
         //表示可以匿名访问
         filterChainDefinitionMap.put("/jsp/login.jsp*", "anon");
         filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/loginPage", "anon");
         filterChainDefinitionMap.put("/logout*", "anon");
         filterChainDefinitionMap.put("/webjars/**", "anon");
         filterChainDefinitionMap.put("/js/**", "anon");
         filterChainDefinitionMap.put("/css/**", "anon");
+        filterChainDefinitionMap.put("/assets/**", "anon");
+
 
         //表示需要认证才可以访问
         filterChainDefinitionMap.put("/*", "authc");
