@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,7 +23,9 @@ import java.util.Set;
 @ToString(exclude = {"roles"})
 @NoArgsConstructor
 @AllArgsConstructor
-public class Permission {
+public class Permission implements Serializable {
+
+    public static Long serialVersionUID = 1l;
 
     /**
      * 权限编码

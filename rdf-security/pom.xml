@@ -69,6 +69,10 @@
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>fullcalendar</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

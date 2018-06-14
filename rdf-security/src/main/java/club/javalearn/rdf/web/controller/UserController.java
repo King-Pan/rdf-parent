@@ -23,4 +23,11 @@ public class UserController {
     public ModelAndView userPage(){
         return new ModelAndView("system/user");
     }
+
+
+    @GetMapping("/profile")
+    @SysLog(module = "用户模块",operation = "修改个人信息")
+    public ModelAndView profilePage(){
+        return new ModelAndView("system/profile");
+    }
 }

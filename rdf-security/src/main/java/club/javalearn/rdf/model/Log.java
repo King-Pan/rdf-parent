@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -18,7 +19,9 @@ import java.util.Date;
 @Table(name = "sys_log")
 @Entity
 @Data
-public class Log {
+public class Log implements Serializable{
+
+    public static Long serialVersionUID = 1l;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

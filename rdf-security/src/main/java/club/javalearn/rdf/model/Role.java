@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -25,7 +26,10 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = {"users","permissions"})
-public class Role {
+public class Role implements Serializable {
+
+    public static Long serialVersionUID = 1l;
+
     /**
      * 角色编码
      */

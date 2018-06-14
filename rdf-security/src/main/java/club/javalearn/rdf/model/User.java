@@ -27,6 +27,8 @@ import java.util.*;
 @ToString(exclude = {"roles"})
 public class User implements Serializable {
 
+    public static Long serialVersionUID = 1l;
+
     /**
      * 用戶编码-自增长策略
      */
