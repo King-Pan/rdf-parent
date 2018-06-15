@@ -30,4 +30,10 @@ public class UserController {
     public ModelAndView profilePage(){
         return new ModelAndView("system/profile");
     }
+
+    @GetMapping("/test")
+    public ModelAndView test(){
+        return new ModelAndView("test");
+    }
+
 }
