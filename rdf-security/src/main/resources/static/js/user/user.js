@@ -1,23 +1,30 @@
 $(function () {
     $('#userTable').bootstrapTable({
         columns: [{
-            field: 'id',
-            title: 'Item ID'
+            field: 'userId',
+            title: '用户编码',
+            visible: false
         }, {
-            field: 'name',
-            title: 'Item Name'
+            field: 'userName',
+            title: '用户名称'
         }, {
-            field: 'price',
-            title: 'Item Price'
-        }],
-        data: [{
-            id: 1,
-            name: 'Item 1',
-            price: '$1'
+            field: 'nickName',
+            title: '昵称'
         }, {
-            id: 2,
-            name: 'Item 2',
-            price: '$2'
+            field: 'email',
+            title: '邮箱'
+        }, {
+            field: 'phoneNum',
+            title: '电话'
+        }, {
+            field: 'status',
+            title: '状态'
+        }, {
+            field: 'createTime',
+            title: '创建时间'
+        }, {
+            field: 'lastLoginTime',
+            title: '最后登录时间'
         }]
     });
 });
