@@ -88,4 +88,8 @@ public class Log implements Serializable{
      */
     @Column(length = 4000)
     private String errorMessage;
+
+    void a(){
+        String a = "SELECT count(1) FROM FPF_USER_ROLE r WHERE EXISTS (SELECT 1 FROM FPF_USER_ROLE_MAP M,FPF_USER_USER U WHERE U.USERID=M.USERID and  u.USERID='admin') and r.ROLE_NAME like '%维护组%' or r.ROLE_NAME LIKE '%维护角色%';";
+    }
 }

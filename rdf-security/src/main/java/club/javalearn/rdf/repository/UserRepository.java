@@ -2,7 +2,10 @@ package club.javalearn.rdf.repository;
 
 import club.javalearn.rdf.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.QueryHint;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,5 +23,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
      * @param userName 用户名
      * @return 用户信息
      */
+    @QueryHints({@QueryHint(name= org.hibernate.jpa.QueryHints.HINT_CACHEABLE,value = "true")})
     User findByUserName(String userName);
 }
+
