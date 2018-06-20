@@ -14,8 +14,51 @@
         <div id="m_aside_left" class="m-grid__item	m-aside-left  m-aside-left--skin-dark "
              th:insert="commons/left_menu :: leftMenu">
         </div>
-        <div class="m-grid__item m-grid__item--fluid m-wrapper">
-            <table id="userTable"></table>
+        <div class="m-grid__item m-grid__item--fluid m-wrapper panel-body" style="padding-bottom: 0px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-filter"></i>查询内容
+                    <span style="float: right;">
+                        <a class="qry-btn" onclick="doQuery()">
+                            <i class="fa fa-search"></i>查询
+				        </a>
+				    </span>
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group col-lg-4">
+                            <label class="col-sm-4 control-label">用户名</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="qUserName" type="text" value="该输入框获得焦点...">
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label class="col-sm-4 control-label">昵称</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="qNickName" type="text" value="该输入框获得焦点...">
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label class="col-sm-4 control-label">状态</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="qStatus" type="text" value="该输入框获得焦点...">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        用户管理
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <table id="userTable"></table>
+                </div>
+            </div>
+
         </div>
     </div>
     <!--导入footer-->
@@ -24,7 +67,7 @@
 
 
 <!--导入左侧工具栏-->
-<div th:replace="commons/move_bar :: moveBar"></div>
+<!--<div th:replace="commons/move_bar :: moveBar"></div>-->
 
 <div th:replace="commons/onload_js :: onloadJS"></div>
 <script th:src="@{/js/user/user.js}" src="js/user/user.js"></script>
